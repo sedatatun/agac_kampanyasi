@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Ağaç Kampanyası</title>
+<style>
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+  margin: 0;
+  padding: 0;
+}
+.container { max-width: 700px; margin: 30px auto; padding: 20px 20px 50px 20px; }
+header { margin-bottom: 50px; }
+.logo { width: 420px; display: block; margin: 20px auto 10px auto; }
+.davetYazisi { font-size: 24px; color: #1b5e20; font-weight: 900; margin: 0 0 5px 0; line-height: 1.3; }
+.hedefYazisi { font-size: 24px; font-weight: bold; color: #1b5e20; margin: 10px 0 10px 0; }
+.baslik { font-size: 48px; font-weight: bold; color: #2e7d32; margin: 10px 0 20px 0; font-family: 'Arial Black', Arial, sans-serif; white-space: nowrap; }
+
+#agacAlan { display: flex; flex-direction: column; align-items: center; margin-top: 20px; margin-bottom: 20px; min-height: 250px; }
+.agac { width: 120px; height: auto; transition: transform 2s ease-in-out; transform-origin: bottom center; max-height: 200px; }
+#durum { font-size: 20px; color: #388e3c; margin: 15px 0; }
+
+.progress-container { width: 100%; background: #c8e6c9; border-radius: 30px; overflow: hidden; margin: 20px 0; box-shadow: inset 0 0 5px rgba(0,0,0,0.2); }
+.progress-bar { height: 40px; width: 0%; background: linear-gradient(90deg, #66bb6a, #43a047, #2e7d32); text-align: center; color: white; font-weight: bold; line-height: 40px; border-radius: 30px; transition: width 1s ease, background 1s ease; position: relative; overflow: hidden; }
+.progress-bar::before { content: ""; position: absolute; top: 0; left: -50%; width: 50%; height: 100%; background: rgba(255,255,255,0.3); transform: skewX(-20deg); animation: shineProgress 2s linear infinite; }
+@keyframes shineProgress { 0% { left: -50%; } 100% { left: 100%; } }
+
+#fidanSayisi.animate { animation: fidanAnim 0.5s ease; }
+@keyframes fidanAnim { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+.leaf { position: absolute; width: 30px; height: 30px; background-image: url('yaprak.png'); background-size: contain; background-repeat: no-repeat; pointer-events: none; opacity: 0.8; z-index: 9999; }
+@keyframes fly { 0% { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 1; } 25% { transform: translateY(150px) rotate(45deg) scale(0.6); } 50% { transform: translateY(300px) rotate(90deg) scale(0.7); } 75% { transform: translateY(500px) rotate(180deg) scale(0.85); } 100% { transform: translateY(800px) rotate(360deg) scale(1); opacity: 0; } }
+
+#tesekkur { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 36px; color: #1b5e20; font-weight: bold; background: rgba(255,255,255,0.9); padding: 30px 50px; border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3); display: none; text-align: center; z-index: 1000; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <img src="logo.png" alt="Okul Logosu" class="logo">
+    <h2 id="davetYazisi" class="davetYazisi">Tüm halkımızı ağaç dikmeye davet ediyoruz 🌱</h2>
+    <h2 class="hedefYazisi">Hedef: 2000 fidan</h2>
+    <h1 class="baslik">Ağaç Dikme Kampanyası</h1>
+  </header>
+
+  <main>
+    <div id="agacAlan">
+      <img id="agacResim" class="agac" src="tohum.png" alt="Ağaç">
+      <p id="durum">Henüz tohum ekildi 🌱</p>
+    </div>
+
+    <div class="progress-container">
+      <div id="progressBar" class="progress-bar">0%</div>
+    </div>
+
+    <p id="fidanSayisi">Şu ana kadar 0 fidan dikildi 🌱</p>
+  </main>
+</div>
+
+<div id="tesekkur">🎉 Teşekkürler! 2000 fidan hedefe ulaştı! 🌳</div>
+
+<script>
+// Elle fidan sayısını buradan değiştir
+let toplamFidan = 0; // <<< değiştir
+
+const hedef = 2000;
+
+function guncelleSayiyi() {
+  const yuzde = Math.floor((toplamFidan / hedef) * 100);
+
+  const progress = document.getElementById("progressBar");
+  progress.style.width = yuzde + "%";
+  progress.innerText = yuzde + "%";
+
+  const agac = document.getElementById("agacResim");
+  const scale = 1 + (yuzde / 100) * 0.8;
+  agac.style.transform = `scale(${scale})`;
+
+  const durum = document.getElementById("durum");
+
+  if(toplamFidan <= 99){
+    agac.src = "tohum.png";
+    durum.innerText = "Henüz tohum ekildi 🌱";
+  } else if(toplamFidan <= 250){
+    agac.src = "filiz.png";
+    durum.innerText = "Filiz çıktı 🌿";
+  } else if(toplamFidan <= 999){
+    agac.src = "fidan.png";
+    durum.innerText = "Fidan büyüyor 🌳";
+  } else if(toplamFidan <= 1800){
+    agac.src = "agac-genc.png";
+    durum.innerText = "Ağaç genç 🌳";
+  } else if(toplamFidan <= 1999){
+    agac.src = "agac-orta.png";
+    durum.innerText = "Ağaç orta 🌳";
+  } else {
+    agac.src = "agac-buyuk.png";
+    durum.innerText = "🌳 Muhteşem bir ağaç oldu!";
+    document.getElementById("tesekkur").style.display = "block";
+    document.getElementById("davetYazisi").innerText = "🎉 Tüm halkımıza teşekkürler! 🌳";
+    yaprakAnimasyonu();
+  }
+
+  const fidanText = document.getElementById("fidanSayisi");
+  fidanText.innerText = `Şu ana kadar ${toplamFidan} fidan dikildi 🌱`;
+  fidanText.classList.add("animate");
+  setTimeout(() => fidanText.classList.remove("animate"), 500);
+}
+
+function yaprakAnimasyonu() {
+  for(let i = 0; i < 30; i++){
+    const leaf = document.createElement("div");
+    leaf.className = "leaf";
+    const size = 20 + Math.random() * 20;
+    leaf.style.width = size + "px";
+    leaf.style.height = size + "px";
+    leaf.style.left = Math.random() * (window.innerWidth - size) + "px";
+    leaf.style.top = "-50px";
+    const sure = 6 + Math.random() * 6;
+    leaf.style.animation = `fly ${sure}s linear forwards`;
+    document.body.appendChild(leaf);
+    setTimeout(() => leaf.remove(), sure * 1000);
+  }
+}
+
+window.onload = guncelleSayiyi;
+</script>
+
+</body>
+</html>
